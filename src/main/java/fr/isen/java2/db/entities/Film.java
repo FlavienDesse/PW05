@@ -27,6 +27,7 @@ public class Film {
 		this.summary = summary;
 	}
 
+
 	public Integer getId() {
 		return id;
 	}
