@@ -12,7 +12,7 @@ public class FilmDao {
     public List<Film> listFilms() {
 
         List<Film> listOfFilms = new ArrayList<>();
-        try (Connection connection = DataSourceFactory.getDataSource().getConnection()) {
+        try (Connection connection = DataSourceFactory.getDataSource()) {
             try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM film JOIN genre ON film.genre_id = genre.idgenre")) {
 
                 try (ResultSet results = statement.executeQuery()) {
@@ -30,6 +30,8 @@ public class FilmDao {
                                 results.getString("summary"));
                         listOfFilms.add(film);
                     }
+                    statement.close();
+
                 }
             }
         } catch (SQLException e) {
@@ -40,7 +42,7 @@ public class FilmDao {
 
     public List<Film> listFilmsByGenre(String genreName) {
         List<Film> listOfFilms = new ArrayList<>();
-        try (Connection connection = DataSourceFactory.getDataSource().getConnection()) {
+        try (Connection connection = DataSourceFactory.getDataSource()) {
             try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM film JOIN genre ON film.genre_id = genre.idgenre WHERE genre.name = ?")) {
                 statement.setString(1, genreName);
                 try (ResultSet results = statement.executeQuery()) {
@@ -57,6 +59,7 @@ public class FilmDao {
                                 results.getString("summary"));
                         listOfFilms.add(film);
                     }
+                    statement.close();
                 }
             }
         } catch (SQLException e) {
@@ -66,10 +69,9 @@ public class FilmDao {
     }
 
     public Film addFilm(Film film) {
-        try (Connection connection = DataSourceFactory.getDataSource().getConnection()) {
+        try (Connection connection = DataSourceFactory.getDataSource()) {
             String sqlQuery = "insert into film(title,release_date,genre_id,duration,director,summary) " + "VALUES(?,?,?,?,?,?)";
             try (PreparedStatement statement = connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
-
 
                 statement.setString(1, film.getTitle());
                 statement.setDate(2, java.sql.Date.valueOf(film.getReleaseDate()));
@@ -77,8 +79,14 @@ public class FilmDao {
                 statement.setInt(4, film.getDuration());
                 statement.setString(5, film.getDirector());
                 statement.setString(6, film.getSummary());
+                ResultSet ids = statement.getGeneratedKeys();
                 statement.executeUpdate();
-                return film;
+
+                if(ids.next()){
+                    return new Film(ids.getInt(1),film.getTitle(),film.getReleaseDate(),film.getGenre(),film.getDuration(),film.getDirector(),film.getSummary());
+                }
+                statement.close();
+                ids.close();
             }
         } catch (SQLException e) {
             // Manage Exception

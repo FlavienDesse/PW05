@@ -25,7 +25,7 @@ public class FilmDaoTestCase {
 
     @Before
     public void initDb() throws Exception {
-        Connection connection = DataSourceFactory.getDataSource().getConnection();
+        Connection connection = DataSourceFactory.getDataSource();
         Statement stmt = connection.createStatement();
         stmt.executeUpdate(
                 "CREATE TABLE IF NOT EXISTS genre (idgenre INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT , name VARCHAR(50) NOT NULL);");
@@ -93,8 +93,8 @@ public class FilmDaoTestCase {
        
 
         Genre genre = new Genre(3,"Horror");
-        Film film = filmDao.addFilm(new Film( 5,"Moi moche", LocalDate.of(2015,11,26), genre, 120, "director 1", "summary of the first film"));
-        Connection connection = DataSourceFactory.getDataSource().getConnection();
+        filmDao.addFilm(new Film( 5,"Moi moche", LocalDate.of(2015,11,26), genre, 120, "director 1", "summary of the first film"));
+        Connection connection = DataSourceFactory.getDataSource();
         Statement statement = connection.createStatement();
         ResultSet resultSetFilm = statement.executeQuery("SELECT * FROM film WHERE title='Moi moche'");
 
