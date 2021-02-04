@@ -49,14 +49,7 @@ public class GenreDaoTestCase {
 		assertThat(genre.getId()).isEqualTo(2);
 		assertThat(genre.getName()).isEqualTo("Comedy");
 	}
-	@Test
-	public void shouldGetGenreById() {
-		// WHEN
-		Genre genre = genreDao.getById(1);
-		// THEN
-		assertThat(genre.getId()).isEqualTo(1);
-		assertThat(genre.getName()).isEqualTo("Drama");
-	}
+
 	
 	@Test
 	public void shouldNotGetUnknownGenre() {

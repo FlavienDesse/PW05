@@ -17,9 +17,7 @@ public class FilmDao {
 
                 try (ResultSet results = statement.executeQuery()) {
                     while (results.next()) {
-                        GenreDao genreDao = new GenreDao();
-
-                        Genre genre = genreDao.getById(results.getInt("genre_id"));
+                        Genre genre = new Genre(results.getInt("genre_id"),results.getString("name")) ;
                         Film film = new Film(
                                 results.getInt("idfilm"),
                                 results.getString("title"),
@@ -48,8 +46,7 @@ public class FilmDao {
                 statement.setString(1, genreName);
                 try (ResultSet results = statement.executeQuery()) {
                     while (results.next()) {
-                        GenreDao genreDao = new GenreDao();
-                        Genre genre = genreDao.getById(results.getInt("genre_id"));
+                        Genre genre = new Genre(results.getInt("genre_id"),results.getString("name")) ;
                         Film film = new Film(
                                 results.getInt("idfilm"),
                                 results.getString("title"),
