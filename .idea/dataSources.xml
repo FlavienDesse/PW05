@@ -18,5 +18,16 @@
         </library>
       </libraries>
     </data-source>
+    <data-source source="LOCAL" name="sqlite [2]" uuid="2d89a9b8-70a0-4461-b3ab-e0ebd9d24c54">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\flav6\Desktop\PW05\sqlite.db</jdbc-url>
+      <libraries>
+        <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.34.0/sqlite-jdbc-3.34.0.jar</url>
+        </library>
+      </libraries>
+    </data-source>
   </component>
 </project>

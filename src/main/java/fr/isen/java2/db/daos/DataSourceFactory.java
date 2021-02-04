@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 public class DataSourceFactory {
 
-    private static Connection dataSource;
+    private static Connection dataSource = null;
     private static String url = "jdbc:sqlite:sqlite.db";
 
     private DataSourceFactory() {
@@ -23,11 +23,7 @@ public class DataSourceFactory {
         throw new IllegalStateException("This is a static class that should not be instantiated");
     }
 
-    /**
-     * @return a connection to the SQLite Database
-     */
-    public static Connection getDataSource()  {
-
+    public static Connection getDataSource() {
         try {
             dataSource = DriverManager.getConnection(url);
             return dataSource;

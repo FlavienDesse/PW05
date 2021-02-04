@@ -30,6 +30,7 @@ public class FilmDao {
                                 results.getString("summary"));
                         listOfFilms.add(film);
                     }
+                    results.close();
                     statement.close();
 
                 }
@@ -59,6 +60,7 @@ public class FilmDao {
                                 results.getString("summary"));
                         listOfFilms.add(film);
                     }
+                    results.close();
                     statement.close();
                 }
             }

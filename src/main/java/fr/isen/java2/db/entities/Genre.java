@@ -7,6 +7,17 @@ public class Genre {
 	public Genre() {
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Genre){
+			Genre genre = (Genre)obj;
+			if(this.id.equals(genre.getId()) && this.name.equals(genre.getName())){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public Genre(Integer id, String name) {
 		super();
 		this.id = id;

@@ -19,6 +19,7 @@ public class GenreDao {
                         Genre book = new Genre(results.getInt("idgenre"), results.getString("name"));
                         listOfBooks.add(book);
                     }
+                    results.close();
                     statement.close();
                 }
             }
@@ -39,6 +40,7 @@ public class GenreDao {
                     if (results.next()) {
                         return new Genre(results.getInt("idgenre"),results.getString("name"));
                     }
+                    results.close();
                     statement.close();
                 }
             }
@@ -75,6 +77,7 @@ public class GenreDao {
                     if (results.next()) {
                         return new Genre(results.getInt("idgenre"),results.getString("name"));
                     }
+                    results.close();
                     statement.close();
                 }
             }

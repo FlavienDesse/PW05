@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import fr.isen.java2.db.entities.Film;
+
 import java.time.*;
 
 import fr.isen.java2.db.entities.Genre;
@@ -52,25 +53,14 @@ public class FilmDaoTestCase {
     @Test
     public void shouldListFilms() {
         List<Film> films = filmDao.listFilms();
-        List <Genre> genres = new ArrayList<>();
-
-
-        for (Film f: films) {
-            genres.add(f.getGenre());
-        }
-
-        assertThat(genres).hasSize(3);
-        assertThat(genres).extracting("id", "name").containsOnly(tuple(1, "Drama"), tuple(2, "Comedy"), tuple(2, "Comedy"));
-
-
 
         // THEN
         assertThat(films).hasSize(3);
 
-        assertThat(films).extracting("id", "title", "releaseDate", "duration", "director", "summary").containsOnly(
-                tuple(1, "Title 1", LocalDate.of(2015,11,26), 120, "director 1", "summary of the first film"),
-                tuple(2, "My Title 2", LocalDate.of(2015,11,14),  114, "director 2", "summary of the second film"),
-                tuple(3, "Third title", LocalDate.of(2015,12,12), 176, "director 3", "summary of the third film"));
+        assertThat(films).extracting("id", "title", "releaseDate", "genre", "duration", "director", "summary").containsOnly(
+                tuple(1, "Title 1", LocalDate.of(2015, 11, 26), new Genre(1, "Drama"), 120, "director 1", "summary of the first film"),
+                tuple(2, "My Title 2", LocalDate.of(2015, 11, 14), new Genre(2, "Comedy"), 114, "director 2", "summary of the second film"),
+                tuple(3, "Third title", LocalDate.of(2015, 12, 12), new Genre(2, "Comedy"), 176, "director 3", "summary of the third film"));
     }
 
     @Test
@@ -80,9 +70,9 @@ public class FilmDaoTestCase {
         assertThat(films).hasSize(2);
 
 
-        assertThat(films).extracting("id", "title", "releaseDate", "duration", "director", "summary").containsOnly(
-                tuple(2, "My Title 2", LocalDate.of(2015,11,14),  114, "director 2", "summary of the second film"),
-                tuple(3, "Third title", LocalDate.of(2015,12,12), 176, "director 3", "summary of the third film"));
+        assertThat(films).extracting("id", "title", "releaseDate", "genre", "duration", "director", "summary").containsOnly(
+                tuple(2, "My Title 2", LocalDate.of(2015, 11, 14), new Genre(2, "Comedy"), 114, "director 2", "summary of the second film"),
+                tuple(3, "Third title", LocalDate.of(2015, 12, 12), new Genre(2, "Comedy"), 176, "director 3", "summary of the third film"));
 
 
     }
@@ -90,10 +80,9 @@ public class FilmDaoTestCase {
     @Test
     public void shouldAddFilm() throws Exception {
 
-       
 
-        Genre genre = new Genre(3,"Horror");
-        filmDao.addFilm(new Film( 5,"Moi moche", LocalDate.of(2015,11,26), genre, 120, "director 1", "summary of the first film"));
+        Genre genre = new Genre(3, "Horror");
+        filmDao.addFilm(new Film(5, "Moi moche", LocalDate.of(2015, 11, 26), genre, 120, "director 1", "summary of the first film"));
         Connection connection = DataSourceFactory.getDataSource();
         Statement statement = connection.createStatement();
         ResultSet resultSetFilm = statement.executeQuery("SELECT * FROM film WHERE title='Moi moche'");
@@ -105,14 +94,13 @@ public class FilmDaoTestCase {
         assertThat(resultSetFilm.getInt("duration")).isEqualTo(120);
         assertThat(resultSetFilm.getString("director")).isEqualTo("director 1");
         assertThat(resultSetFilm.getString("summary")).isEqualTo("summary of the first film");
-        assertThat(resultSetFilm.getDate("release_date")).isEqualTo(  java.sql.Date.valueOf((LocalDate.of(2015,11,26))));
+        assertThat(resultSetFilm.getDate("release_date")).isEqualTo(java.sql.Date.valueOf((LocalDate.of(2015, 11, 26))));
         assertThat(resultSetFilm.getInt("genre_id")).isEqualTo(3);
         assertThat(resultSetFilm.next()).isFalse();
 
         resultSetFilm.close();
         statement.close();
         connection.close();
-
 
 
     }
