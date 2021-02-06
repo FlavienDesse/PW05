@@ -15,6 +15,9 @@ import fr.isen.java2.db.entities.Genre;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertNotNull;
+
+
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.tuple;
 
@@ -82,13 +85,14 @@ public class FilmDaoTestCase {
 
 
         Genre genre = new Genre(3, "Horror");
-        filmDao.addFilm(new Film(5, "Moi moche", LocalDate.of(2015, 11, 26), genre, 120, "director 1", "summary of the first film"));
+        Film filmRes = filmDao.addFilm(new Film(5, "Moi moche", LocalDate.of(2015, 11, 26), genre, 120, "director 1", "summary of the first film"));
         Connection connection = DataSourceFactory.getDataSource();
         Statement statement = connection.createStatement();
         ResultSet resultSetFilm = statement.executeQuery("SELECT * FROM film WHERE title='Moi moche'");
 
 
         assertThat(resultSetFilm.next()).isTrue();
+        assertNotNull(filmRes);
         assertThat(resultSetFilm.getInt("idfilm")).isNotNull();
         assertThat(resultSetFilm.getString("title")).isEqualTo("Moi moche");
         assertThat(resultSetFilm.getInt("duration")).isEqualTo(120);
@@ -101,7 +105,5 @@ public class FilmDaoTestCase {
         resultSetFilm.close();
         statement.close();
         connection.close();
-
-
     }
 }
